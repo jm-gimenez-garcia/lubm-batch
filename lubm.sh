@@ -141,30 +141,30 @@ declare -i final
 for i in $(seq 1 ${number});
 do
 	if [[ "$temp" != "" ]]; then
-		folder[i]=$(mktemp -d -p ${temp})
+		folder[$i]=$(mktemp -d -p ${temp})
 	else
-		folder[i]=$(mktemp -d)
+		folder[$i]=$(mktemp -d)
 	fi
-	mkdir ${folder[i]}/lubm
-	cd ${folder[i]}/lubm
+	mkdir ${folder[$i]}/lubm
+	cd ${folder[$i]}/lubm
 	final=${index}+${univ}-1
 	echo "Generating ${univ} universities from ${index} to ${final} with seed ${seed} and namespace ${onto}"
 	java -cp ${lubm}/classes/ edu.lehigh.swat.bench.uba.Generator -univ ${univ} -index ${index} -seed ${seed} -onto ${onto} > ${redirection}
 	if [[ "$parallel" = true ]]; then
 		echo "Generating file ${output}/lubm.${index}-${final}.${format} in parallel."
-		tofile ${index} ${final} ${format} ${output} ${folder[i]} ${redirection} &
+		tofile ${index} ${final} ${format} ${output} ${folder[$i]} ${redirection} &
 	else
 		echo "Generating file ${output}/lubm.${index}-${final}.${format}."
-		tofile ${index} ${final} ${format} ${output} ${folder[i]} ${redirection}
+		tofile ${index} ${final} ${format} ${output} ${folder[$i]} ${redirection}
 	fi
-	pid[i]=$!
+	pid[$i]=$!
 	index=$final+1
 done
 
 if [[ "$parallel" = true ]]; then
 	for i in $(seq 1 ${number});
 	do
-		echo "Waiting for generation of file #${i} (PID ${pid[i]}) to finish."
+		echo "Waiting for generation of file #${i} (PID ${pid[$i]}) to finish."
 		wait ${pid[i]}
 	done
 fi
