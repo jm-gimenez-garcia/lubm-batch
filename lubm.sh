@@ -33,7 +33,7 @@ function showhelp {
 }
 
 function tofile { # ${index} ${final} ${format} ${output} ${folder} ${redirection}
-	find ${5} -name '*.owl' -exec rapper -o ${3} {} 2> ${6} \; | LC_ALL=C sort -u -T ${5} | LC_ALL=C sort -R -T ${5} > ${4}/lubm.${1}-${2}.${3}
+	find ${5} -name '*.owl' -exec rapper -o ${3} {} 2> ${6} \; | LC_ALL=C sort -u -T ${5} | sed 's=\\=/=g' | LC_ALL=C sort -R -T ${5} > ${4}/lubm.${1}-${2}.${3}
 	rm -rf ${5}
 	case "$compress" in
 		"gzip") gzip -f9 ${4}/lubm.${1}-${2}.${3} ;;
